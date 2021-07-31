@@ -1,5 +1,5 @@
 <template>
-  <Tetris id="tetris"/>
+  <Tetris/>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 import Timer = NodeJS.Timer;
-import { ref, computed } from "vue";
+import { ref, computed , onMounted } from "vue";
 import {
   squareMino,
   tMino,
@@ -14,6 +14,13 @@ import { Mino, MinoType } from "../types/tetris";
 const minos = [squareMino, tMino, jMino, lMino, zMino, sMino, iMino];
 
 const useTetris = () => {
+  
+  onMounted( () => {
+    const tetrisEl = document.getElementById('tetris')
+    tetrisEl?.focus();
+  });
+  
+  
   const currentMino = ref<Mino>(getRandomMino());
   const nextMino = ref<Mino>(getRandomMino());
   const holdMino = ref<Mino | null>(null);
