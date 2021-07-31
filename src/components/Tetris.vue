@@ -4,8 +4,17 @@
        @keyup.right="move('r')"
        @keyup.down="fall()"
        @keyup.space="spin()"
+       @keyup.enter="hold()"
        tabindex="1"
   >
+    <div class="holdFields">
+      <h2>Hold</h2>
+      <div class="row" v-for="row in holdFields">
+        <div class="col" v-for="col in row">
+          <div class="nextCell" :class="getStyleByType(col)"/>
+        </div>
+      </div>
+    </div>
     <div class="fields">
       <div class="row" v-for="row in fields">
         <div class="col" v-for="col in row">
@@ -14,6 +23,7 @@
       </div>
     </div>
     <div class="nextFields">
+      <h2>Next</h2>
       <div class="row" v-for="row in nextFields">
         <div class="col" v-for="col in row">
           <div class="nextCell" :class="getStyleByType(col)"/>
@@ -58,17 +68,19 @@ const getStyleByType = (type: number) => {
 
 export default defineComponent({
   setup() {
-    const {fields,nextFields, start, move, fall, spin} = useTetris();
+    const {fields,nextFields,holdFields, start, move, fall, spin,hold} = useTetris();
 
-    start(100)
+    start(300)
 
     return {
       fields,
       nextFields,
+      holdFields,
       getStyleByType,
       move,
       fall,
       spin,
+      hold
     }
   }
 })
@@ -98,6 +110,10 @@ export default defineComponent({
 
 .nextFields{
   margin-left: 14px;
+}
+
+.holdFields{
+  margin-right: 14px;
 }
 
 .cell,

@@ -9,15 +9,18 @@ import {
   sMino,
   iMino,
 } from "../constants/tetris";
-import { Mino } from "../types/tetris";
+import { Mino, MinoType } from "../types/tetris";
 
 const minos = [squareMino, tMino, jMino, lMino, zMino, sMino, iMino];
 
 const useTetris = () => {
   const currentMino = ref<Mino>(getRandomMino());
   const nextMino = ref<Mino>(getRandomMino());
+  const holdMino = ref<Mino | null>(null);
+
+  const processingTimer = ref<Timer | null>(null);
   
-  const processingTimer = ref<Timer|null>(null);
+  const hasHeldMino = ref<boolean>(false);
 
   const fields = ref<number[][]>([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 21
@@ -51,28 +54,28 @@ const useTetris = () => {
   const start = (interval = 1000) => {
     processingTimer.value = setInterval(processing, interval);
   };
-  
+
   const processing = () => {
     if (existsValidBoundaryBottom(attachedFields.value, currentMino.value)) {
       // ミノを下げる
       currentMino.value = fallDownMino(currentMino.value);
     } else {
       fields.value = clearLines(attachedFields.value);
-    
-      currentMino.value = nextMino.value;
-      
-      nextMino.value = getRandomMino();
+
+      setNextMino();
+  
+      hasHeldMino.value = false;
     }
-    
-    if( !existsValidBoundary(fields.value, currentMino.value)){
-      alert("finish")
-      
+
+    if (!existsValidBoundary(fields.value, currentMino.value)) {
+      alert("finish");
+
       const timer = processingTimer.value;
-      if(timer !== null){
+      if (timer !== null) {
         clearInterval(timer);
       }
     }
-  }
+  };
 
   const fall = () => {
     const tempMino = fallDownMino(currentMino.value);
@@ -95,7 +98,43 @@ const useTetris = () => {
     }
   };
 
-  const nextFields = computed(() => {
+  const hold = () => {
+    if(hasHeldMino.value){
+      return;
+    }
+    
+    if (holdMino.value) {
+      // ホールド済み
+      const tempMino = currentMino.value;
+      currentMino.value = holdMino.value;
+      holdMino.value = getMinoBaseByType(minos, tempMino.type);
+    } else {
+      // 初回ホールド
+      holdMino.value = getMinoBaseByType(minos, currentMino.value.type);
+      setNextMino();
+    }
+    
+    hasHeldMino.value = true;
+  };
+
+  const getMinoBaseByType = (minos: Mino[], minoType: MinoType) => {
+    return minos.find((mino) => mino.type === minoType) as Mino;
+  };
+
+  const setNextMino = () => {
+    currentMino.value = nextMino.value;
+    nextMino.value = getRandomMino();
+  };
+  
+  const holdFields = computed(() => {
+    return getSubFields(holdMino.value)
+  });
+  
+  const nextFields = computed( () => {
+    return getSubFields(nextMino.value)
+  })
+
+  const getSubFields = (mino: Mino | null) => {
     const baseFields = [
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
@@ -103,26 +142,32 @@ const useTetris = () => {
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ];
-
-    return nextMino.value.coordinates.reduce((fields, coordinate) => {
+  
+    if (mino === null) {
+      return baseFields;
+    }
+    
+    return mino.coordinates.reduce((fields, coordinate) => {
       const { row, col } = coordinate;
 
       const rowOffset = 1;
       const colOffset = 3;
-      
-      baseFields[row + rowOffset][col - colOffset] = nextMino.value.type;
+
+      baseFields[row + rowOffset][col - colOffset] = mino.type;
 
       return baseFields;
     }, baseFields);
-  });
+  };
 
   return {
     fields: attachedFields,
     nextFields,
+    holdFields,
     start,
     move,
     fall,
     spin,
+    hold,
   };
 };
 
