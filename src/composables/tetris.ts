@@ -58,15 +58,16 @@ const useTetris = () => {
   };
 
   const fall = () => {
-    if (existsValidBoundaryBottom(attachedFields.value, currentMino.value)) {
-      // ミノを下げる
-      currentMino.value = fallDownMino(currentMino.value);
+    const tempMino = fallDownMino(currentMino.value);
+    if(existsValidBoundary(fields.value, tempMino)){
+      currentMino.value = tempMino
     }
   };
 
   const move = (input: "l" | "r") => {
-    if (existsValidBoundarySide(fields.value, currentMino.value, input)) {
-      currentMino.value = moveMino(currentMino.value, input);
+    const tempMino = moveMino(currentMino.value, input);
+    if(existsValidBoundary(fields.value, tempMino)){
+        currentMino.value = tempMino
     }
   };
   
