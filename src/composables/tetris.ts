@@ -1,3 +1,4 @@
+import Timer = NodeJS.Timer;
 import { ref, computed } from "vue";
 import {
   squareMino,
@@ -15,6 +16,8 @@ const minos = [squareMino, tMino, jMino, lMino, zMino, sMino, iMino];
 const useTetris = () => {
   const currentMino = ref<Mino>(getRandomMino());
   const nextMino = ref<Mino>(getRandomMino());
+  
+  const processingTimer = ref<Timer|null>(null);
 
   const fields = ref<number[][]>([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 21
@@ -45,19 +48,31 @@ const useTetris = () => {
     return attachMino(fields.value, currentMino.value);
   });
 
-  const timer = (interval = 1000) => {
-    setInterval(() => {
-      if (existsValidBoundaryBottom(attachedFields.value, currentMino.value)) {
-        // ミノを下げる
-        currentMino.value = fallDownMino(currentMino.value);
-      } else {
-        fields.value = clearLines(attachedFields.value);
-
-        currentMino.value = nextMino.value;
-        nextMino.value = getRandomMino();
-      }
-    }, interval);
+  const start = (interval = 1000) => {
+    processingTimer.value = setInterval(processing, interval);
   };
+  
+  const processing = () => {
+    if (existsValidBoundaryBottom(attachedFields.value, currentMino.value)) {
+      // ミノを下げる
+      currentMino.value = fallDownMino(currentMino.value);
+    } else {
+      fields.value = clearLines(attachedFields.value);
+    
+      currentMino.value = nextMino.value;
+      
+      nextMino.value = getRandomMino();
+    }
+    
+    if( !existsValidBoundary(fields.value, currentMino.value)){
+      alert("finish")
+      
+      const timer = processingTimer.value;
+      if(timer !== null){
+        clearInterval(timer);
+      }
+    }
+  }
 
   const fall = () => {
     const tempMino = fallDownMino(currentMino.value);
@@ -104,7 +119,7 @@ const useTetris = () => {
   return {
     fields: attachedFields,
     nextFields,
-    timer,
+    start,
     move,
     fall,
     spin,

@@ -58,9 +58,9 @@ const getStyleByType = (type: number) => {
 
 export default defineComponent({
   setup() {
-    const {fields,nextFields, timer, move, fall, spin} = useTetris();
+    const {fields,nextFields, start, move, fall, spin} = useTetris();
 
-    timer(1000)
+    start(100)
 
     return {
       fields,
