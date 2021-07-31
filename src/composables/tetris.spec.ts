@@ -5,8 +5,10 @@ import {
   moveMino,
   existsValidBoundarySide,
   clearLines,
+  rotateMinoS,
 } from "./tetris";
 import { Mino } from "../types/tetris";
+import { sMino } from "../constants/tetris";
 
 describe("tetris", () => {
   const fields: number[][] = [
@@ -37,6 +39,7 @@ describe("tetris", () => {
   it("attach mino", () => {
     const mino: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -88,6 +91,7 @@ describe("tetris", () => {
   it("falldown mino", () => {
     const mino: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -112,6 +116,7 @@ describe("tetris", () => {
 
     expect(fallenDownMino).toEqual({
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 1,
@@ -136,6 +141,7 @@ describe("tetris", () => {
   it("move mino left", () => {
     const mino: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -160,6 +166,7 @@ describe("tetris", () => {
 
     expect(moveLeftMino).toEqual({
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -184,6 +191,7 @@ describe("tetris", () => {
   it("move mino right", () => {
     const mino: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -208,6 +216,7 @@ describe("tetris", () => {
 
     expect(moveRightMino).toEqual({
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -232,6 +241,7 @@ describe("tetris", () => {
   it("checks boundary", () => {
     const mino: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -254,6 +264,7 @@ describe("tetris", () => {
 
     const mino2: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 16,
@@ -273,10 +284,10 @@ describe("tetris", () => {
         },
       ],
     };
-    
-    
+
     const mino3: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 12,
@@ -296,9 +307,10 @@ describe("tetris", () => {
         },
       ],
     };
-    
+
     const mino4: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 13,
@@ -318,7 +330,7 @@ describe("tetris", () => {
         },
       ],
     };
-    
+
     const fields = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 21
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 20
@@ -353,6 +365,7 @@ describe("tetris", () => {
   it("checks mino is able to move left", () => {
     const mino: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -375,6 +388,7 @@ describe("tetris", () => {
 
     const mino2: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -427,6 +441,7 @@ describe("tetris", () => {
   it("checks mino is able to move right", () => {
     const mino: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -449,6 +464,7 @@ describe("tetris", () => {
 
     const mino2: Mino = {
       type: 2,
+      stateIndex: 1,
       coordinates: [
         {
           row: 0,
@@ -548,5 +564,88 @@ describe("tetris", () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 1
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 0
     ]);
+  });
+
+  describe("rotation", () => {
+    it("checks S mino", () => {
+      const rotateFirst = rotateMinoS(sMino);
+
+      expect(rotateFirst).toEqual<Mino>({
+        type: 2,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: 0,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 2,
+            col: 5,
+          },
+        ],
+      });
+
+      const rotateSecond = rotateMinoS(rotateFirst);
+
+      expect(rotateSecond).toEqual<Mino>({
+        type: 2,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 2,
+            col: 4,
+          },
+          {
+            row: 2,
+            col: 3,
+          },
+        ],
+      });
+
+      const rotateThird = rotateMinoS(rotateSecond);
+
+      expect(rotateThird).toEqual<Mino>({
+        type: 2,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: 2,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 3,
+          },
+          {
+            row: 0,
+            col: 3,
+          },
+        ],
+      });
+
+      const rotateForth = rotateMinoS(rotateThird);
+
+      expect(rotateForth).toEqual<Mino>(sMino);
+    });
   });
 });

@@ -112,7 +112,7 @@ export const fallDownMino = (mino: Mino): Mino => {
   });
 
   return {
-    type: mino.type,
+    ...mino,
     coordinates: fallenCoordinates,
   };
 };
@@ -126,7 +126,7 @@ export const moveMino = (mino: Mino, input: "l" | "r"): Mino => {
   });
 
   return {
-    type: mino.type,
+    ...mino,
     coordinates: moveCoordinates,
   };
 };
@@ -134,30 +134,32 @@ export const moveMino = (mino: Mino, input: "l" | "r"): Mino => {
 export const existsValidBoundaryBottom = (fields: number[][], mino: Mino) => {
   const limit = fields.length;
 
-  const cols = [ ...new Set(mino.coordinates.map( coordinate => coordinate.col ) )]
-  
-  const rowsTable = cols.reduce( (table, col) => {
-    
-    const targetRows = mino.coordinates.filter( coordinate => coordinate.col === col).map( coordinate => coordinate.row )
-    
-    if(targetRows.length === 0 ){
+  const cols = [
+    ...new Set(mino.coordinates.map((coordinate) => coordinate.col)),
+  ];
+
+  const rowsTable = cols.reduce((table, col) => {
+    const targetRows = mino.coordinates
+      .filter((coordinate) => coordinate.col === col)
+      .map((coordinate) => coordinate.row);
+
+    if (targetRows.length === 0) {
       return table;
     }
-    
-    table[col] = Math.max( ...targetRows)
+
+    table[col] = Math.max(...targetRows);
     return table;
-  }, {} as any)
-  
-  
+  }, {} as any);
+
   return mino.coordinates
     .filter((coordinate) => {
       const { row, col } = coordinate;
-      
-      return rowsTable[col] === row
+
+      return rowsTable[col] === row;
     })
     .map((coordinate) => {
       const { row, col } = coordinate;
-      
+
       return row + 1 < limit ? fields[row + 1][col] : -1;
     })
     .every((cell) => cell === 0);
@@ -221,5 +223,94 @@ export const rotateMino = (mino: Mino) => {
     case 5:
     case 6:
     case 7:
+  }
+};
+
+export const rotateMinoS = (mino: Mino): Mino => {
+  const { coordinates, stateIndex } = mino;
+
+  const [first, second, third, forth] = coordinates;
+
+  switch (stateIndex) {
+    case 1:
+      return {
+        ...mino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col + 1,
+          },
+          second,
+          {
+            row: third.row + 1,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row + 2,
+            col: forth.col,
+          },
+        ],
+      };
+    case 2:
+      return {
+        ...mino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col + 1,
+          },
+          second,
+          {
+            row: third.row + 1,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row,
+            col: forth.col - 2,
+          },
+        ],
+      };
+    case 3:
+      return {
+        ...mino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col - 1,
+          },
+          second,
+          {
+            row: third.row - 1,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row - 2,
+            col: forth.col,
+          },
+        ],
+      };
+    case 4:
+      return {
+        ...mino,
+        stateIndex: 1,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col - 1,
+          },
+          second,
+          {
+            row: third.row - 1,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row,
+            col: forth.col + 2,
+          },
+        ],
+      };
   }
 };

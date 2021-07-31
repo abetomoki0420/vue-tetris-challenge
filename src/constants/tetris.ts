@@ -2,6 +2,7 @@ import { Mino } from "../types/tetris";
 
 export const squareMino: Mino = {
   type: 1,
+  stateIndex: 1,
   coordinates: [
     {
       row: 0,
@@ -22,8 +23,26 @@ export const squareMino: Mino = {
   ],
 };
 
+// --------
+//  - 3 4
+//  1 2 -
+//  - - -
+// --------
+//  - 1 -
+//  - 2 3
+//  - - 4
+// --------
+//  - - -
+//  - 2 1
+//  4 3 -
+// --------
+//  4 - -
+//  3 2 -
+//  - 1 -
+// --------
 export const sMino: Mino = {
   type: 2,
+  stateIndex: 1,
   coordinates: [
     {
       row: 1,
@@ -46,6 +65,7 @@ export const sMino: Mino = {
 
 export const jMino: Mino = {
   type: 3,
+  stateIndex: 1,
   coordinates: [
     {
       row: 0,
@@ -68,6 +88,7 @@ export const jMino: Mino = {
 
 export const lMino: Mino = {
   type: 4,
+  stateIndex: 1,
   coordinates: [
     {
       row: 1,
@@ -90,6 +111,7 @@ export const lMino: Mino = {
 
 export const zMino: Mino = {
   type: 5,
+  stateIndex: 1,
   coordinates: [
     {
       row: 0,
@@ -112,6 +134,7 @@ export const zMino: Mino = {
 
 export const tMino: Mino = {
   type: 6,
+  stateIndex: 1,
   coordinates: [
     {
       row: 1,
@@ -134,6 +157,7 @@ export const tMino: Mino = {
 
 export const iMino: Mino = {
   type: 7,
+  stateIndex: 1,
   coordinates: [
     {
       row: 1,
