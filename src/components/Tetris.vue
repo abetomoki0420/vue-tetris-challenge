@@ -1,9 +1,9 @@
 <template>
   <div class="container"
-       @keypress.left="move('l')"
-       @keypress.right="move('r')"
-       @keypress.down="fall()"
-       @keypress.space="spin()"
+       @keyup.left="move('l')"
+       @keyup.right="move('r')"
+       @keyup.down="fall()"
+       @keyup.space="spin()"
        tabindex="1"
   >
     <div class="fields">
@@ -53,7 +53,7 @@ export default defineComponent({
   setup() {
     const {fields, timer, move, fall, spin} = useTetris();
 
-      timer(1000)
+    // timer(1000)
 
     return {
       fields,

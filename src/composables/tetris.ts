@@ -71,7 +71,10 @@ const useTetris = () => {
   };
   
   const spin = () => {
-    currentMino.value = rotateMino(currentMino.value);
+    const tempMino = rotateMino(currentMino.value);
+    if(existsValidBoundary(fields.value, tempMino)){
+      currentMino.value = tempMino
+    }
   }
 
   return {
@@ -218,6 +221,14 @@ export const clearLines = (fields: number[][]) => {
 
   return resultFields;
 };
+
+export const existsValidBoundary = (fields: number[][], mino: Mino ) => {
+  return mino.coordinates.map( coordinate => {
+    const { row , col } = coordinate;
+    
+    return fields[row][col]
+  }).every( (value) => value === 0 )
+}
 
 export const rotateMino = (mino: Mino) => {
   switch (mino.type) {
