@@ -69,12 +69,17 @@ const useTetris = () => {
       currentMino.value = moveMino(currentMino.value, input);
     }
   };
+  
+  const spin = () => {
+    currentMino.value = rotateMino(currentMino.value);
+  }
 
   return {
     fields: attachedFields,
     timer,
     move,
     fall,
+    spin
   };
 };
 

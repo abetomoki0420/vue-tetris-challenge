@@ -1,8 +1,9 @@
 <template>
   <div class="container"
-       @keyup.left="move('l')"
-       @keyup.right="move('r')"
-       @keyup.down="fall()"
+       @keypress.left="move('l')"
+       @keypress.right="move('r')"
+       @keypress.down="fall()"
+       @keypress.space="spin()"
        tabindex="1"
   >
     <div class="fields">
@@ -50,15 +51,16 @@ const getStyleByType = (type: number) => {
 
 export default defineComponent({
   setup() {
-    const {fields, timer, move, fall} = useTetris();
+    const {fields, timer, move, fall, spin} = useTetris();
 
-    // timer(300)
+      timer(1000)
 
     return {
       fields,
       getStyleByType,
       move,
-      fall
+      fall,
+      spin
     }
   }
 })
