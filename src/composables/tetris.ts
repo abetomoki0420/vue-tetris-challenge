@@ -217,8 +217,11 @@ export const clearLines = (fields: number[][]) => {
 export const rotateMino = (mino: Mino) => {
   switch (mino.type) {
     case 1:
+      return mino;
     case 2:
+      return rotateMinoS(mino)
     case 3:
+      return rotateMinoJ(mino)
     case 4:
     case 5:
     case 6:
@@ -309,6 +312,95 @@ export const rotateMinoS = (mino: Mino): Mino => {
           {
             row: forth.row,
             col: forth.col + 2,
+          },
+        ],
+      };
+  }
+};
+
+export const rotateMinoJ = (mino: Mino): Mino => {
+  const { coordinates, stateIndex } = mino;
+
+  const [first, second, third, forth] = coordinates;
+
+  switch (stateIndex) {
+    case 1:
+      return {
+        ...mino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: first.row ,
+            col: first.col + 2,
+          },
+          {
+            row: second.row - 1,
+            col: second.col + 1,
+          },
+          third,
+          {
+            row: forth.row + 1,
+            col: forth.col - 1,
+          },
+        ],
+      };
+    case 2:
+      return {
+        ...mino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: first.row + 2,
+            col: first.col,
+          },
+          {
+            row: second.row + 1,
+            col: second.col + 1,
+          },
+          third,
+          {
+            row: forth.row - 1,
+            col: forth.col - 1,
+          },
+        ],
+      };
+    case 3:
+      return {
+        ...mino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: first.row ,
+            col: first.col - 2,
+          },
+          {
+            row: second.row + 1,
+            col: second.col - 1,
+          },
+          third,
+          {
+            row: forth.row - 1,
+            col: forth.col + 1,
+          },
+        ],
+      };
+    case 4:
+      return {
+        ...mino,
+        stateIndex: 1,
+        coordinates: [
+          {
+            row: first.row - 2,
+            col: first.col,
+          },
+          {
+            row: second.row - 1,
+            col: second.col - 1,
+          },
+          third,
+          {
+            row: forth.row + 1,
+            col: forth.col + 1,
           },
         ],
       };

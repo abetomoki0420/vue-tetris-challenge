@@ -5,10 +5,10 @@ import {
   moveMino,
   existsValidBoundarySide,
   clearLines,
-  rotateMinoS,
+  rotateMinoS, rotateMinoJ,
 } from "./tetris";
 import { Mino } from "../types/tetris";
-import { sMino } from "../constants/tetris";
+import { sMino, jMino } from "../constants/tetris";
 
 describe("tetris", () => {
   const fields: number[][] = [
@@ -647,5 +647,86 @@ describe("tetris", () => {
 
       expect(rotateForth).toEqual<Mino>(sMino);
     });
-  });
+    
+    it("checks J mino", () => {
+      const rotateFirst = rotateMinoJ(jMino);
+  
+      expect(rotateFirst).toEqual<Mino>({
+        type: 3,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: 0,
+            col: 6,
+          },
+          {
+            row: 0,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 2,
+            col: 5,
+          },
+        ],
+      });
+  
+      const rotateSecond = rotateMinoJ(rotateFirst);
+  
+      expect(rotateSecond).toEqual<Mino>({
+        type: 3,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: 2,
+            col: 6,
+          },
+          {
+            row: 1,
+            col: 6,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+        ],
+      });
+  
+      const rotateThird = rotateMinoJ(rotateSecond);
+  
+      expect(rotateThird).toEqual<Mino>({
+        type: 3,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: 2,
+            col: 4,
+          },
+          {
+            row: 2,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 0,
+            col: 5,
+          },
+        ],
+      });
+  
+      const rotateForth = rotateMinoJ(rotateThird);
+  
+      expect(rotateForth).toEqual<Mino>(jMino);
+    });
+    });
 });
