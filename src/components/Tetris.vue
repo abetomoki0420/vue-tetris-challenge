@@ -13,6 +13,13 @@
         </div>
       </div>
     </div>
+    <div class="nextFields">
+      <div class="row" v-for="row in nextFields">
+        <div class="col" v-for="col in row">
+          <div class="nextCell" :class="getStyleByType(col)"/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -51,16 +58,17 @@ const getStyleByType = (type: number) => {
 
 export default defineComponent({
   setup() {
-    const {fields, timer, move, fall, spin} = useTetris();
+    const {fields,nextFields, timer, move, fall, spin} = useTetris();
 
     timer(1000)
 
     return {
       fields,
+      nextFields,
       getStyleByType,
       move,
       fall,
-      spin
+      spin,
     }
   }
 })
@@ -74,6 +82,8 @@ export default defineComponent({
   height: 100%;
   width: 100%;
   background: rgba(0,0,0,0.1);
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 .container:focus {
@@ -81,16 +91,31 @@ export default defineComponent({
 }
 
 .row,
-.col {
+.col
+{
   display: flex;
+}
+
+.nextFields{
+  margin-left: 14px;
+}
+
+.cell,
+.nextCell
+{
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-sizing: content-box;
+  background: white;
 }
 
 .cell {
   width: 40px;
   height: 40px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  box-sizing: content-box;
-  background: white;
+}
+
+.nextCell {
+  width: 20px;
+  height: 20px;
 }
 
 .yellow {

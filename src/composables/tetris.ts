@@ -14,6 +14,7 @@ const minos = [squareMino, tMino, jMino, lMino, zMino, sMino, iMino];
 
 const useTetris = () => {
   const currentMino = ref<Mino>(getRandomMino());
+  const nextMino = ref<Mino>(getRandomMino());
 
   const fields = ref<number[][]>([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 21
@@ -52,38 +53,61 @@ const useTetris = () => {
       } else {
         fields.value = clearLines(attachedFields.value);
 
-        currentMino.value = getRandomMino();
+        currentMino.value = nextMino.value;
+        nextMino.value = getRandomMino();
       }
     }, interval);
   };
 
   const fall = () => {
     const tempMino = fallDownMino(currentMino.value);
-    if(existsValidBoundary(fields.value, tempMino)){
-      currentMino.value = tempMino
+    if (existsValidBoundary(fields.value, tempMino)) {
+      currentMino.value = tempMino;
     }
   };
 
   const move = (input: "l" | "r") => {
     const tempMino = moveMino(currentMino.value, input);
-    if(existsValidBoundary(fields.value, tempMino)){
-        currentMino.value = tempMino
+    if (existsValidBoundary(fields.value, tempMino)) {
+      currentMino.value = tempMino;
     }
   };
-  
+
   const spin = () => {
     const tempMino = rotateMino(currentMino.value);
-    if(existsValidBoundary(fields.value, tempMino)){
-      currentMino.value = tempMino
+    if (existsValidBoundary(fields.value, tempMino)) {
+      currentMino.value = tempMino;
     }
-  }
+  };
+
+  const nextFields = computed(() => {
+    const baseFields = [
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ];
+
+    return nextMino.value.coordinates.reduce((fields, coordinate) => {
+      const { row, col } = coordinate;
+
+      const rowOffset = 1;
+      const colOffset = 3;
+      
+      baseFields[row + rowOffset][col - colOffset] = nextMino.value.type;
+
+      return baseFields;
+    }, baseFields);
+  });
 
   return {
     fields: attachedFields,
+    nextFields,
     timer,
     move,
     fall,
-    spin
+    spin,
   };
 };
 
@@ -223,13 +247,15 @@ export const clearLines = (fields: number[][]) => {
   return resultFields;
 };
 
-export const existsValidBoundary = (fields: number[][], mino: Mino ) => {
-  return mino.coordinates.map( coordinate => {
-    const { row , col } = coordinate;
-    
-    return fields[row][col]
-  }).every( (value) => value === 0 )
-}
+export const existsValidBoundary = (fields: number[][], mino: Mino) => {
+  return mino.coordinates
+    .map((coordinate) => {
+      const { row, col } = coordinate;
+
+      return fields[row][col];
+    })
+    .every((value) => value === 0);
+};
 
 export const rotateMino = (mino: Mino) => {
   switch (mino.type) {
