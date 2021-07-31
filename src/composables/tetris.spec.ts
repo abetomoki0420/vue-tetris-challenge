@@ -5,10 +5,15 @@ import {
   moveMino,
   existsValidBoundarySide,
   clearLines,
-  rotateMinoS, rotateMinoJ,
+  rotateMinoS,
+  rotateMinoJ,
+  rotateMinoI,
+  rotateMinoL,
+  rotateMinoT,
+  rotateMinoZ,
 } from "./tetris";
 import { Mino } from "../types/tetris";
-import { sMino, jMino } from "../constants/tetris";
+import { sMino, jMino, iMino, lMino, tMino, zMino } from "../constants/tetris";
 
 describe("tetris", () => {
   const fields: number[][] = [
@@ -647,10 +652,10 @@ describe("tetris", () => {
 
       expect(rotateForth).toEqual<Mino>(sMino);
     });
-    
+
     it("checks J mino", () => {
       const rotateFirst = rotateMinoJ(jMino);
-  
+
       expect(rotateFirst).toEqual<Mino>({
         type: 3,
         stateIndex: 2,
@@ -673,9 +678,9 @@ describe("tetris", () => {
           },
         ],
       });
-  
+
       const rotateSecond = rotateMinoJ(rotateFirst);
-  
+
       expect(rotateSecond).toEqual<Mino>({
         type: 3,
         stateIndex: 3,
@@ -698,9 +703,9 @@ describe("tetris", () => {
           },
         ],
       });
-  
+
       const rotateThird = rotateMinoJ(rotateSecond);
-  
+
       expect(rotateThird).toEqual<Mino>({
         type: 3,
         stateIndex: 4,
@@ -723,10 +728,337 @@ describe("tetris", () => {
           },
         ],
       });
-  
+
       const rotateForth = rotateMinoJ(rotateThird);
-  
+
       expect(rotateForth).toEqual<Mino>(jMino);
     });
+
+    it("checks L mino", () => {
+      const rotateFirst = rotateMinoL(lMino);
+
+      expect(rotateFirst).toEqual<Mino>({
+        ...lMino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: 0,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 2,
+            col: 4,
+          },
+          {
+            row: 2,
+            col: 5,
+          },
+        ],
+      });
+
+      const rotateSecond = rotateMinoL(rotateFirst);
+
+      expect(rotateSecond).toEqual<Mino>({
+        ...lMino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 3,
+          },
+          {
+            row: 2,
+            col: 3,
+          },
+        ],
+      });
+
+      const rotateThird = rotateMinoL(rotateSecond);
+
+      expect(rotateThird).toEqual<Mino>({
+        ...lMino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: 2,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 0,
+            col: 4,
+          },
+          {
+            row: 0,
+            col: 3,
+          },
+        ],
+      });
+
+      const rotateForth = rotateMinoL(rotateThird);
+
+      expect(rotateForth).toEqual<Mino>(lMino);
     });
+
+    it("checks Z mino", () => {
+      const rotateFn = rotateMinoZ;
+      const baseMino = zMino;
+      const rotateFirst = rotateFn(zMino);
+
+      expect(rotateFirst).toEqual<Mino>({
+        ...baseMino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: 0,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 2,
+            col: 4,
+          },
+        ],
+      });
+
+      const rotateSecond = rotateFn(rotateFirst);
+
+      expect(rotateSecond).toEqual<Mino>({
+        ...baseMino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: 1,
+            col: 6,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 0,
+            col: 5,
+          },
+          {
+            row: 0,
+            col: 4,
+          },
+        ],
+      });
+
+      const rotateThird = rotateFn(rotateSecond);
+
+      expect(rotateThird).toEqual<Mino>({
+        ...baseMino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: 2,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 6,
+          },
+          {
+            row: 0,
+            col: 6,
+          },
+        ],
+      });
+
+      const rotateForth = rotateFn(rotateThird);
+
+      expect(rotateForth).toEqual<Mino>(baseMino);
+    });
+
+    it("checks T mino", () => {
+      const rotateFn = rotateMinoT;
+      const rotateFirst = rotateFn(tMino);
+
+      expect(rotateFirst).toEqual<Mino>({
+        ...tMino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: 0,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 6,
+          },
+          {
+            row: 2,
+            col: 5,
+          },
+        ],
+      });
+
+      const rotateSecond = rotateFn(rotateFirst);
+
+      expect(rotateSecond).toEqual<Mino>({
+        ...tMino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: 1,
+            col: 6,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 2,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+        ],
+      });
+
+      const rotateThird = rotateFn(rotateSecond);
+
+      expect(rotateThird).toEqual<Mino>({
+        ...tMino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: 2,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 0,
+            col: 5,
+          },
+        ],
+      });
+
+      const rotateForth = rotateFn(rotateThird);
+
+      expect(rotateForth).toEqual<Mino>(tMino);
+    });
+
+    it("checks I mino", () => {
+      const rotateFirst = rotateMinoI(iMino);
+
+      expect(rotateFirst).toEqual<Mino>({
+        ...iMino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: 0,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 2,
+            col: 4,
+          },
+          {
+            row: 3,
+            col: 4,
+          },
+        ],
+      });
+
+      const rotateSecond = rotateMinoI(rotateFirst);
+
+      expect(rotateSecond).toEqual<Mino>({
+        ...iMino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: 1,
+            col: 6,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 4,
+          },
+          {
+            row: 1,
+            col: 3,
+          },
+        ],
+      });
+
+      const rotateThird = rotateMinoI(rotateSecond);
+
+      expect(rotateThird).toEqual<Mino>({
+        ...iMino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: 3,
+            col: 5,
+          },
+          {
+            row: 2,
+            col: 5,
+          },
+          {
+            row: 1,
+            col: 5,
+          },
+          {
+            row: 0,
+            col: 5,
+          },
+        ],
+      });
+
+      const rotateForth = rotateMinoI(rotateThird);
+
+      expect(rotateForth).toEqual<Mino>(iMino);
+    });
+  });
 });

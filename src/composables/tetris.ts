@@ -219,13 +219,17 @@ export const rotateMino = (mino: Mino) => {
     case 1:
       return mino;
     case 2:
-      return rotateMinoS(mino)
+      return rotateMinoS(mino);
     case 3:
-      return rotateMinoJ(mino)
+      return rotateMinoJ(mino);
     case 4:
+      return rotateMinoL(mino);
     case 5:
+      return rotateMinoZ(mino);
     case 6:
+      return rotateMinoT(mino);
     case 7:
+      return rotateMinoI(mino);
   }
 };
 
@@ -330,7 +334,7 @@ export const rotateMinoJ = (mino: Mino): Mino => {
         stateIndex: 2,
         coordinates: [
           {
-            row: first.row ,
+            row: first.row,
             col: first.col + 2,
           },
           {
@@ -370,7 +374,7 @@ export const rotateMinoJ = (mino: Mino): Mino => {
         stateIndex: 4,
         coordinates: [
           {
-            row: first.row ,
+            row: first.row,
             col: first.col - 2,
           },
           {
@@ -400,6 +404,374 @@ export const rotateMinoJ = (mino: Mino): Mino => {
           third,
           {
             row: forth.row + 1,
+            col: forth.col + 1,
+          },
+        ],
+      };
+  }
+};
+
+export const rotateMinoL = (mino: Mino): Mino => {
+  const { coordinates, stateIndex } = mino;
+
+  const [first, second, third, forth] = coordinates;
+
+  switch (stateIndex) {
+    case 1:
+      return {
+        ...mino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col + 1,
+          },
+          second,
+          {
+            row: third.row + 1,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row + 2,
+            col: forth.col,
+          },
+        ],
+      };
+    case 2:
+      return {
+        ...mino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col + 1,
+          },
+          second,
+          {
+            row: third.row - 1,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row,
+            col: forth.col - 2,
+          },
+        ],
+      };
+    case 3:
+      return {
+        ...mino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col - 1,
+          },
+          second,
+          {
+            row: third.row - 1,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row - 2,
+            col: forth.col,
+          },
+        ],
+      };
+    case 4:
+      return {
+        ...mino,
+        stateIndex: 1,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col - 1,
+          },
+          second,
+          {
+            row: third.row + 1,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row,
+            col: forth.col + 2,
+          },
+        ],
+      };
+  }
+};
+
+export const rotateMinoZ = (mino: Mino): Mino => {
+  const { coordinates, stateIndex } = mino;
+
+  const [first, second, third, forth] = coordinates;
+
+  switch (stateIndex) {
+    case 1:
+      return {
+        ...mino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col + 1,
+          },
+          second,
+          {
+            row: third.row - 1,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row,
+            col: forth.col - 2,
+          },
+        ],
+      };
+    case 2:
+      return {
+        ...mino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col + 1,
+          },
+          second,
+          {
+            row: third.row - 1,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row - 2,
+            col: forth.col,
+          },
+        ],
+      };
+    case 3:
+      return {
+        ...mino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col - 1,
+          },
+          second,
+          {
+            row: third.row + 1,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row,
+            col: forth.col + 2,
+          },
+        ],
+      };
+    case 4:
+      return {
+        ...mino,
+        stateIndex: 1,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col - 1,
+          },
+          second,
+          {
+            row: third.row + 1,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row + 2,
+            col: forth.col,
+          },
+        ],
+      };
+  }
+};
+
+export const rotateMinoT = (mino: Mino): Mino => {
+  const { coordinates, stateIndex } = mino;
+
+  const [first, second, third, forth] = coordinates;
+
+  switch (stateIndex) {
+    case 1:
+      return {
+        ...mino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col + 1,
+          },
+          second,
+          {
+            row: third.row + 1,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row + 1,
+            col: forth.col - 1,
+          },
+        ],
+      };
+    case 2:
+      return {
+        ...mino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col + 1,
+          },
+          second,
+          {
+            row: third.row + 1,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row - 1,
+            col: forth.col - 1,
+          },
+        ],
+      };
+    case 3:
+      return {
+        ...mino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col - 1,
+          },
+          second,
+          {
+            row: third.row - 1,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row - 1,
+            col: forth.col + 1,
+          },
+        ],
+      };
+    case 4:
+      return {
+        ...mino,
+        stateIndex: 1,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col - 1,
+          },
+          second,
+          {
+            row: third.row - 1,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row + 1,
+            col: forth.col + 1,
+          },
+        ],
+      };
+  }
+};
+
+export const rotateMinoI = (mino: Mino): Mino => {
+  const { coordinates, stateIndex } = mino;
+
+  const [first, second, third, forth] = coordinates;
+
+  switch (stateIndex) {
+    case 1:
+      return {
+        ...mino,
+        stateIndex: 2,
+        coordinates: [
+          {
+            row: first.row - 2,
+            col: first.col + 1,
+          },
+          {
+            row: second.row - 1,
+            col: second.col,
+          },
+          {
+            row: third.row,
+            col: third.col - 1,
+          },
+          {
+            row: forth.row + 1,
+            col: forth.col - 2,
+          },
+        ],
+      };
+    case 2:
+      return {
+        ...mino,
+        stateIndex: 3,
+        coordinates: [
+          {
+            row: first.row + 1,
+            col: first.col + 2,
+          },
+          {
+            row: second.row,
+            col: second.col + 1,
+          },
+          {
+            row: third.row - 1,
+            col: third.col,
+          },
+          {
+            row: forth.row - 2,
+            col: forth.col - 1,
+          },
+        ],
+      };
+    case 3:
+      return {
+        ...mino,
+        stateIndex: 4,
+        coordinates: [
+          {
+            row: first.row + 2,
+            col: first.col - 1,
+          },
+          {
+            row: second.row + 1,
+            col: second.col,
+          },
+          {
+            row: third.row,
+            col: third.col + 1,
+          },
+          {
+            row: forth.row - 1,
+            col: forth.col + 2,
+          },
+        ],
+      };
+    case 4:
+      return {
+        ...mino,
+        stateIndex: 1,
+        coordinates: [
+          {
+            row: first.row - 1,
+            col: first.col - 2,
+          },
+          {
+            row: second.row,
+            col: second.col - 1,
+          },
+          {
+            row: third.row + 1,
+            col: third.col,
+          },
+          {
+            row: forth.row + 2,
             col: forth.col + 1,
           },
         ],
