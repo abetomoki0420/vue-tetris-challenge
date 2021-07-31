@@ -52,7 +52,7 @@ export default defineComponent({
   setup() {
     const {fields, timer, move, fall} = useTetris();
 
-    // timer()
+    // timer(300)
 
     return {
       fields,

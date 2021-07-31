@@ -1,28 +1,30 @@
-export const squareMino = {
-  type: 1,
-  coordinates:[
-    {
-      row: 0,
-      col: 4,
-    },
-    {
-      row: 1,
-      col: 4,
-    },
-    {
-      row: 0,
-      col: 5,
-    },
-    {
-      row: 1,
-      col: 5,
-    },
-  ]
-}
+import { Mino } from "../types/tetris";
 
-export const sMino = {
+export const squareMino: Mino = {
+  type: 1,
+  coordinates: [
+    {
+      row: 0,
+      col: 4,
+    },
+    {
+      row: 1,
+      col: 4,
+    },
+    {
+      row: 0,
+      col: 5,
+    },
+    {
+      row: 1,
+      col: 5,
+    },
+  ],
+};
+
+export const sMino: Mino = {
   type: 2,
-  coordinates:[
+  coordinates: [
     {
       row: 1,
       col: 3,
@@ -39,12 +41,12 @@ export const sMino = {
       row: 0,
       col: 5,
     },
-  ]
-}
+  ],
+};
 
-export const jMino = {
+export const jMino: Mino = {
   type: 3,
-  coordinates:[
+  coordinates: [
     {
       row: 0,
       col: 4,
@@ -61,12 +63,12 @@ export const jMino = {
       row: 1,
       col: 6,
     },
-  ]
-}
+  ],
+};
 
-export const lMino = {
+export const lMino: Mino = {
   type: 4,
-  coordinates:[
+  coordinates: [
     {
       row: 1,
       col: 4,
@@ -83,12 +85,12 @@ export const lMino = {
       row: 0,
       col: 6,
     },
-  ]
-}
+  ],
+};
 
-export const zMino = {
+export const zMino: Mino = {
   type: 5,
-  coordinates:[
+  coordinates: [
     {
       row: 0,
       col: 4,
@@ -105,13 +107,12 @@ export const zMino = {
       row: 1,
       col: 6,
     },
-  ]
-}
+  ],
+};
 
-
-export const tMino = {
+export const tMino: Mino = {
   type: 6,
-  coordinates:[
+  coordinates: [
     {
       row: 1,
       col: 4,
@@ -128,12 +129,12 @@ export const tMino = {
       row: 1,
       col: 6,
     },
-  ]
-}
+  ],
+};
 
-export const iMino = {
+export const iMino: Mino = {
   type: 7,
-  coordinates:[
+  coordinates: [
     {
       row: 1,
       col: 4,
@@ -150,6 +151,5 @@ export const iMino = {
       row: 1,
       col: 7,
     },
-  ]
-}
-
+  ],
+};

@@ -1,31 +1,20 @@
-import {ref, computed, onMounted, nextTick} from "vue"
-import {squareMino, tMino, jMino, lMino, zMino, sMino, iMino} from "../constants/tetris";
+import { ref, computed } from "vue";
+import {
+  squareMino,
+  tMino,
+  jMino,
+  lMino,
+  zMino,
+  sMino,
+  iMino,
+} from "../constants/tetris";
+import { Mino } from "../types/tetris";
 
-interface Mino {
-  type: number,
-  coordinates: MinoCoordinate[]
-}
-
-interface MinoCoordinate {
-  row: number,
-  col: number
-}
-
-const minos = [
-  squareMino, tMino, jMino, lMino, zMino, sMino, iMino
-]
-
+const minos = [squareMino, tMino, jMino, lMino, zMino, sMino, iMino];
 
 const useTetris = () => {
-  
-  onMounted(() => {
-    nextTick(() => {
-      document.getElementById('input')?.focus();
-    })
-  })
-  
-  const currentMino = ref<Mino>(getRandomMino()  )
-  
+  const currentMino = ref<Mino>(getRandomMino());
+
   const fields = ref<number[][]>([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 21
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 20
@@ -50,154 +39,187 @@ const useTetris = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 1
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // row 0 -- display start
   ]);
-  
+
   const attachedFields = computed(() => {
-    return attachMino(fields.value, currentMino.value)
-  })
-  
-  const timer = () => {
+    return attachMino(fields.value, currentMino.value);
+  });
+
+  const timer = (interval = 1000) => {
     setInterval(() => {
       if (existsValidBoundaryBottom(attachedFields.value, currentMino.value)) {
         // ミノを下げる
-        currentMino.value = fallDownMino(currentMino.value)
+        currentMino.value = fallDownMino(currentMino.value);
       } else {
-        fields.value = clearLines(attachedFields.value)
-        
+        fields.value = clearLines(attachedFields.value);
+
         currentMino.value = getRandomMino();
       }
-    }, 300)
-  }
-  
+    }, interval);
+  };
+
   const fall = () => {
     if (existsValidBoundaryBottom(attachedFields.value, currentMino.value)) {
       // ミノを下げる
-      currentMino.value = fallDownMino(currentMino.value)
+      currentMino.value = fallDownMino(currentMino.value);
     }
-  }
-  
-  const move = (input: 'l' | 'r') => {
+  };
+
+  const move = (input: "l" | "r") => {
     if (existsValidBoundarySide(fields.value, currentMino.value, input)) {
-      currentMino.value = moveMino(currentMino.value, input)
+      currentMino.value = moveMino(currentMino.value, input);
     }
-  }
-  
+  };
+
   return {
     fields: attachedFields,
     timer,
     move,
-    fall
-  }
-}
+    fall,
+  };
+};
 
 export default useTetris;
 
 export const getRandomMino = () => {
   return minos[Math.floor(Math.random() * minos.length)];
-}
+};
 
 export const attachMino = (field: number[][], mino: Mino) => {
-  const cloneField = [...field]
-  
+  const cloneField = [...field];
+
   const attachedField = mino.coordinates.reduce((accum, coordinate) => {
-    const {row, col} = coordinate;
-    
+    const { row, col } = coordinate;
+
     const targetRow = accum[row];
-    const cloneRow = [...targetRow]
-    
-    cloneRow.splice(col, 1, mino.type)
-    
+    const cloneRow = [...targetRow];
+
+    cloneRow.splice(col, 1, mino.type);
+
     accum.splice(row, 1, cloneRow);
-    
+
     return accum;
-  }, cloneField)
-  
+  }, cloneField);
+
   return attachedField;
-}
+};
 
 export const fallDownMino = (mino: Mino): Mino => {
-  const fallenCoordinates = mino.coordinates.map(coordinate => {
+  const fallenCoordinates = mino.coordinates.map((coordinate) => {
     return {
       row: coordinate.row + 1,
-      col: coordinate.col
-    }
-  })
-  
+      col: coordinate.col,
+    };
+  });
+
   return {
     type: mino.type,
-    coordinates: fallenCoordinates
-  }
-}
+    coordinates: fallenCoordinates,
+  };
+};
 
-export const moveMino = (mino: Mino, input: 'l' | 'r'): Mino => {
-  const moveCoordinates = mino.coordinates.map(coordinate => {
+export const moveMino = (mino: Mino, input: "l" | "r"): Mino => {
+  const moveCoordinates = mino.coordinates.map((coordinate) => {
     return {
       row: coordinate.row,
-      col: input === 'l' ? coordinate.col - 1 : coordinate.col + 1
-    }
-  })
-  
+      col: input === "l" ? coordinate.col - 1 : coordinate.col + 1,
+    };
+  });
+
   return {
     type: mino.type,
-    coordinates: moveCoordinates
-  }
-}
+    coordinates: moveCoordinates,
+  };
+};
 
 export const existsValidBoundaryBottom = (fields: number[][], mino: Mino) => {
   const limit = fields.length;
+
+  const cols = [ ...new Set(mino.coordinates.map( coordinate => coordinate.col ) )]
   
-  const bottomRow = Math.max(...mino.coordinates.map(coordinate => coordinate.row))
+  const rowsTable = cols.reduce( (table, col) => {
+    
+    const targetRows = mino.coordinates.filter( coordinate => coordinate.col === col).map( coordinate => coordinate.row )
+    
+    if(targetRows.length === 0 ){
+      return table;
+    }
+    
+    table[col] = Math.max( ...targetRows)
+    return table;
+  }, {} as any)
+  
   
   return mino.coordinates
-    .filter(coordinate => coordinate.row === bottomRow)
-    .map(coordinate => {
-      const {row, col} = coordinate;
+    .filter((coordinate) => {
+      const { row, col } = coordinate;
+      
+      return rowsTable[col] === row
+    })
+    .map((coordinate) => {
+      const { row, col } = coordinate;
       
       return row + 1 < limit ? fields[row + 1][col] : -1;
-    }).every(cell => cell === 0)
-}
+    })
+    .every((cell) => cell === 0);
+};
 
-export const existsValidBoundarySide = (fields: number[][], mino: Mino, input: 'l' | 'r') => {
+export const existsValidBoundarySide = (
+  fields: number[][],
+  mino: Mino,
+  input: "l" | "r"
+) => {
   const limit = fields[0].length;
-  
-  const cols = mino.coordinates.map(coordinate => coordinate.col)
-  const leftCol = Math.min(...cols)
-  const rightCol = Math.max(...cols)
-  
+
+  const cols = mino.coordinates.map((coordinate) => coordinate.col);
+  const leftCol = Math.min(...cols);
+  const rightCol = Math.max(...cols);
+
   switch (input) {
     case "l":
       return mino.coordinates
-        .filter(coordinate => coordinate.col === leftCol)
-        .map(coordinate => {
-          const {row, col} = coordinate;
-          
+        .filter((coordinate) => coordinate.col === leftCol)
+        .map((coordinate) => {
+          const { row, col } = coordinate;
+
           return col - 1 >= 0 ? fields[row][col - 1] : -1;
-        }).every(cell => cell === 0)
+        })
+        .every((cell) => cell === 0);
     case "r":
       return mino.coordinates
-        .filter(coordinate => coordinate.col === rightCol)
-        .map(coordinate => {
-          const {row, col} = coordinate;
-          
+        .filter((coordinate) => coordinate.col === rightCol)
+        .map((coordinate) => {
+          const { row, col } = coordinate;
+
           return col + 1 < limit ? fields[row][col + 1] : -1;
-        }).every(cell => cell === 0)
+        })
+        .every((cell) => cell === 0);
   }
-}
+};
 
 export const clearLines = (fields: number[][]) => {
-  const cloneFields = [ ...fields]
-  
-  const resultFields = cloneFields
-    .filter( (row) => {
-      return !row.every( col => col !== 0)
-    })
-  
+  const cloneFields = [...fields];
+
+  const resultFields = cloneFields.filter((row) => {
+    return !row.every((col) => col !== 0);
+  });
+
   const clearCount = cloneFields.length - resultFields.length;
-  
-  for( let i = 0; i < clearCount; i++){
-    resultFields.unshift(
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    )
+
+  for (let i = 0; i < clearCount; i++) {
+    resultFields.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   }
-  
+
   return resultFields;
-}
+};
+
+export const rotateMino = (mino: Mino) => {
+  switch (mino.type) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+  }
+};
