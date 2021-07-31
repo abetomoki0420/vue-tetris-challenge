@@ -61,7 +61,8 @@ const useTetris = () => {
         // ミノを下げる
         currentMino.value = fallDownMino(currentMino.value)
       } else {
-        fields.value = attachedFields.value
+        fields.value = clearLines(attachedFields.value)
+        
         currentMino.value = getRandomMino();
       }
     }, 300)
@@ -180,4 +181,23 @@ export const existsValidBoundarySide = (fields: number[][], mino: Mino, input: '
           return col + 1 < limit ? fields[row][col + 1] : -1;
         }).every(cell => cell === 0)
   }
+}
+
+export const clearLines = (fields: number[][]) => {
+  const cloneFields = [ ...fields]
+  
+  const resultFields = cloneFields
+    .filter( (row) => {
+      return !row.every( col => col !== 0)
+    })
+  
+  const clearCount = cloneFields.length - resultFields.length;
+  
+  for( let i = 0; i < clearCount; i++){
+    resultFields.unshift(
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    )
+  }
+  
+  return resultFields;
 }
